@@ -4,7 +4,7 @@ namespace Grav\Plugin;
 use \Grav\Common\Plugin;
 use RocketTheme\Toolbox\Event\Event;
 use Grav\Common\Grav;
-class DiagramsPlugin extends Plugin
+class GravDiagramsPlugin extends Plugin
 {
     protected $theme;
     protected $grav;
@@ -199,17 +199,17 @@ class DiagramsPlugin extends Plugin
             
             //$this->gantt_axis = $this->config->get('gantt.axis');
             
-            $this->grav['assets']->addJs('plugin://diagrams/js/underscore-min.js');
-            $this->grav['assets']->addJs('plugin://diagrams/js/lodash.min.js');
-            $this->grav['assets']->addJs('plugin://diagrams/js/raphael-min.js');
+            $this->grav['assets']->addJs('plugin://grav-diagrams/js/underscore-min.js');
+            $this->grav['assets']->addJs('plugin://grav-diagrams/js/lodash.min.js');
+            $this->grav['assets']->addJs('plugin://grav-diagrams/js/raphael-min.js');
 
             // Used to start the conversion of the div "diagram" when the page is loaded
             $init = "$(document).ready(function() {";
             if($this->hasMermaid)
             {
-                $this->grav['assets']->addJs('plugin://diagrams/js/mermaid.min.js');
+                $this->grav['assets']->addJs('plugin://grav-diagrams/js/mermaid.min.js');
                 if($this->config->get('builtin-css')){
-                     $this->grav['assets']->addCss('plugin://diagrams/css/mermaid.css');
+                     $this->grav['assets']->addCss('plugin://grav-diagrams/css/mermaid.css');
                 }
                
                 $init .= "mermaid.initialize({startOnLoad:true});
@@ -217,12 +217,12 @@ class DiagramsPlugin extends Plugin
             }
             if($this->hasSequence)
             {
-                $this->grav['assets']->addJs('plugin://diagrams/js/sequence-diagram-min.js');
+                $this->grav['assets']->addJs('plugin://grav-diagrams/js/sequence-diagram-min.js');
                 $init .= "$(\".diagram\").sequenceDiagram({theme: '".$this->config->get('theme')."'});";
             }
             if($this->hasFlow)
             {
-                $this->grav['assets']->addJs('plugin://diagrams/js/flowchart-latest.js');
+                $this->grav['assets']->addJs('plugin://grav-diagrams/js/flowchart-latest.js');
                 
                 $this->font_size = $this->config->get('flow.font.size');
                 $this->font_color = $this->config->get('flow.font.color');

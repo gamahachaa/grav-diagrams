@@ -2,7 +2,7 @@
 # ****************
 
 enabled: true	# Plugin activation
-align: left	# Position of diagrams [left, center, right]
+align: center	# Position of diagrams [left, center, right]
 delimiter: fencedcode # Else use shortcode
 builtin-css: false #Plugin CSS (true) or theme (false)
 # Settings of flow diagrams
@@ -30,9 +30,6 @@ mermaid:
 sequence: 
     enabled: false
     theme: simple # Diagrams' themes [simple, hand]
-
-
-
 
 
 
