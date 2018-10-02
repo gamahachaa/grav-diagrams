@@ -1,10 +1,10 @@
-# Grav Diagrams Plugin
+# Grav-Diagrams Plugin
 
-`diagrams` is a [Grav](http://github.com/getgrav/grav) plugin that adds simple and powerful diagrams functionality utilizing the Javascript plugin [js-sequence-diagrams](https://bramp.github.io/js-sequence-diagrams) and [flowchart-js](https://github.com/adrai/flowchart.js).
+`grav-diagrams` is a [Grav](http://github.com/getgrav/grav) plugin that adds simple and powerful diagrams functionality utilizing the Javascript plugin [js-sequence-diagrams](https://bramp.github.io/js-sequence-diagrams) and [flowchart-js](https://github.com/adrai/flowchart.js).
 
 # Installation
 
-Installing the Diagrams plugin can be done in one of two ways. GPM (Grav Package Manager) installation method enables you to quickly and easily install the plugin with a simple terminal command, while the manual method enables you to do so via a zip file. 
+Installing the Grav-Diagrams plugin can be done in one of two ways. GPM (Grav Package Manager) installation method enables you to quickly and easily install the plugin with a simple terminal command, while the manual method enables you to do so via a zip file. 
 
 ## GPM Installation (Preferred)
 
@@ -12,7 +12,7 @@ The simplest way to install this plugin is via the [Grav Package Manager (GPM)](
 
     bin/gpm install diagrams
 
-This will install the Diagrams plugin into your `/user/plugins` directory within Grav. Its files can be found under `/your/site/grav/user/plugins/diagrams`.
+This will install the Grav-Diagrams plugin into your `/user/plugins` directory within Grav. Its files can be found under `/your/site/grav/user/plugins/diagrams`.
 
 ## Manual Installation
 
@@ -146,43 +146,42 @@ You can parameterize the plugin to suit your usage
 ```yaml
 # General settings
 # ****************
-
 enabled: true	# Plugin activation
 align: center	# Position of diagrams [left, center, right]
-
-# Settings of sequence diagrams
-# ****************
-
-theme: simple # Diagrams' themes [simple, hand]
+delimiter: fencedcode # Else use shortcode
+builtin-css: false #Plugin CSS (true) or theme (false)
 
 # Settings of flow diagrams
 # ****************
-
-font:
-  size: 14		# General font size
-  color: black	# General font color
-
-line:
-  color: black	# General color of lines
-
-element:
-  color: black	# General border color of elements
-
-condition:
-  yes: yes		# Default text for the arrows of positive condition
-  no: no		# Default text for the arrows of negative condition
-  
+flow: 
+    enabled: false # when set to false the plugin will not load the JS ext libs
+    font:
+        size: 14		# General font size
+        color: black	# General font color
+    line:
+        color: black	# General color of lines
+    element:
+      color: black	# General border color of elements
+    condition:
+      yes: yes		# Default text for the arrows of positive condition
+      no: no		# Default text for the arrows of negative condition
 # Settings of mermaid
+# ****************     
+mermaid: 
+    enabled: true # when set to false the plugin will not load the JS ext libs
+    gantt:
+        axis: %d.%m.%Y # Default gantt diagram axis format (https://github.com/d3/d3-3.x-api-reference/blob/master/Time-Formatting.md)
+# Settings of sequence diagrams
 # ****************
-
-gantt:
-  axis: %d-%m-%Y # Default gantt diagram axis format (https://github.com/d3/d3-3.x-api-reference/blob/master/Time-Formatting.md)
+sequence: 
+    enabled: false # when set to false the plugin will not load the JS ext libs
+    theme: simple # Diagrams' themes [simple, hand]
 
 ```
 
 # Updating
 
-As development for the Diagrams plugin continues, new versions may become available that add additional features and functionality, improve compatibility with newer Grav releases, and generally provide a better user experience. Updating Diagrams is easy, and can be done through Grav's GPM system, as well as manually.
+As development for the Grav-Diagrams plugin continues, new versions may become available that add additional features and functionality, improve compatibility with newer Grav releases, and generally provide a better user experience. Updating Grav-Diagrams is easy, and can be done through Grav's GPM system, as well as manually.
 
 ## GPM Update (Preferred)
 
