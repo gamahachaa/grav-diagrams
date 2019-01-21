@@ -19,30 +19,21 @@ class GravDiagramsPlugin extends Plugin
     {
         $grav = Grav::instance();
         return [
-//            'onPluginsInitialized' => ['onPluginsInitialized', 0],
             'onPageInitialized' => ['onPageInitialized', 0],
             'onPageContentRaw' => ['onPageContentRaw', 0],
-            'onTwigSiteVariables'   => ['onTwigSiteVariables', 0]
+            'onPageInitialized' => ['onPageInitialized', 0],
+       'onTwigSiteVariables'   => ['onTwigSiteVariables', 0]
         ];
     }
-    public function onPageInitialized(Event $e)
+    public function onPageInitialized(Event $event)
     {
-        $this->grav['debugger']->addMessage("onPageInitialized");
-        $this->config = $this->mergeConfig($e['page']);
+        $this->config = $this->mergeConfig($event['page']);
         $this->hasFlow = $this->config->get('flow.enabled');
         $this->hasMermaid = $this->config->get('mermaid.enabled');
         $this->hasSequence = $this->config->get('sequence.enabled');
+        
     }
 
-//    public function onPluginsInitialized(Event $event)
-//    {
-//        //$this->grav['debugger']->addMessage("onPluginsInitialized");
-//        $this->hasFlow = $this->config->get('flow.enabled');
-//        $this->hasMermaid = $this->config->get('mermaid.enabled');
-//        $this->hasSequence = $this->config->get('sequence.enabled');
-//        //$page = $event['page'];
-//        //dump($this->config);
-//    }
     public function onPageContentRaw(Event $event)
     {
         // Variables
@@ -51,17 +42,15 @@ class GravDiagramsPlugin extends Plugin
         $page = $event['page'];
         $twig = $this->grav['twig'];
 
-        //$this->mergeConfig = $this->mergeConfig($page);
-       // dump($config);
        
         if ($this->config->get('enabled')) {
             $conf = $this->config;
             // Get initial content
             $raw = $page->getRawContent();
 
-            /*****************************
-             * SEQUENCE PART
-             */
+            
+             //SEQUENCE PART
+             
 
             $matchSequence = function ($matches) use (&$page, &$twig, &$conf) {
                 // Get the matching content
@@ -82,9 +71,9 @@ class GravDiagramsPlugin extends Plugin
 
             $raw = $this->parseInjectSequence($raw, $matchSequence);
 
-            /*****************************
-             * FLOW PART
-             */
+            
+            //FLOW PART
+             
 
             $matchFlow = function ($matches) use (&$page, &$twig, &$conf) {
                 static $cpt = 0;
@@ -97,7 +86,6 @@ class GravDiagramsPlugin extends Plugin
                 $search_flow = str_replace("[/flow]", "", $search_flow);
 
                 // Creating the replacement structure
-//                $replace_header = "<div id=\"canvas_".$cpt."\" class=\"flow\" style=\"text-align:".$this->align."\">";
                 $replace_header = "<div id='canvas_.$cpt.' class='flow' style='text-align:.$this->align.'>";
                 $cpt++;
                 $replace_footer = "</div>";
@@ -109,9 +97,9 @@ class GravDiagramsPlugin extends Plugin
 
             $raw = $this->parseInjectFlow($raw, $matchFlow);
 
-            /*****************************
-             * MERMAID PART
-             */
+            
+             //MERMAID PART
+            
 
             $match_mermaid = function ($matches) use (&$page, &$twig, &$conf) {
                 // Get the matching content
@@ -136,12 +124,12 @@ class GravDiagramsPlugin extends Plugin
             };
 
             $raw = $this->parseInjectMermaid($raw, $match_mermaid, $conf->get('delimiter'));
-
-            /*****************************
-             * APPLY CHANGES
-             */
+            
+            //APPLY CHANGES
+             
             $page->setRawContent($raw);
         }
+        /* */
     }
 
     /**
@@ -169,7 +157,6 @@ class GravDiagramsPlugin extends Plugin
      */
     protected function parseInjectMermaid($content, $function, $delimiter)
     {
-         $this->grav['debugger']->addMessage($this->config);
         // Regular Expression for selection
         if($delimiter =='fencedcode') 
         {
@@ -185,32 +172,29 @@ class GravDiagramsPlugin extends Plugin
     /**
      * Set needed ressources to display and convert charts
      */
-    public function onTwigSiteVariables()
+    public function onTwigSiteVariables(Event $event)
     {
-        // Variables
-        //dump("onTwigSiteVariables");
-        $this->grav['debugger']->addMessage("onTwigSiteVariables");
 
-         $this->grav['debugger']->addMessage($this->config);
         // Resources for the conversion
         if($this->hasFlow ||  $this->hasMermaid || $this->hasSequence)
         {
-           
-            
-            //$this->gantt_axis = $this->config->get('gantt.axis');
-            
+
             $this->grav['assets']->addJs('plugin://grav-diagrams/js/underscore-min.js');
             $this->grav['assets']->addJs('plugin://grav-diagrams/js/lodash.min.js');
             $this->grav['assets']->addJs('plugin://grav-diagrams/js/raphael-min.js');
+            $this->grav['assets']->addJs('plugin://grav-diagrams/js/mermaid.min.js');
+            $this->grav['assets']->addJs('plugin://grav-diagrams/js/main.js', 102, true , null, 'bottom' );
+            if($this->config->get('builtin-css')){
+                  $this->grav['assets']->addCss('plugin://grav-diagrams/css/mermaid.css');
+            }
 
             // Used to start the conversion of the div "diagram" when the page is loaded
+            /*
             $init = "$(document).ready(function() {";
             if($this->hasMermaid)
             {
-                $this->grav['assets']->addJs('plugin://grav-diagrams/js/mermaid.min.js');
-                if($this->config->get('builtin-css')){
-                     $this->grav['assets']->addCss('plugin://grav-diagrams/css/mermaid.css');
-                }
+                
+                
                
                 $init .= "mermaid.initialize({startOnLoad:true});
                           mermaid.ganttConfig = {axisFormatter: [['".$this->config->get('mermaid.gantt.axis')."', function (d){return d.getDay() == 1;}]]};";
@@ -259,7 +243,9 @@ class GravDiagramsPlugin extends Plugin
                         
             }
            $init .=  "});";
-            $this->grav['assets']->addInlineJs($init);
+           $this->grav['assets']->addInlineJs($init);
+             * 
+             */
         }
     }
 }
