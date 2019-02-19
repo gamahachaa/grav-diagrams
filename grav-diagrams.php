@@ -174,19 +174,18 @@ class GravDiagramsPlugin extends Plugin
      */
     public function onTwigSiteVariables(Event $event)
     {
-
         // Resources for the conversion
         if($this->hasFlow ||  $this->hasMermaid || $this->hasSequence)
         {
 
-            $this->grav['assets']->addJs('plugin://grav-diagrams/js/underscore-min.js');
-            $this->grav['assets']->addJs('plugin://grav-diagrams/js/lodash.min.js');
-            $this->grav['assets']->addJs('plugin://grav-diagrams/js/raphael-min.js');
-            $this->grav['assets']->addJs('plugin://grav-diagrams/js/mermaid.min.js');
-            $this->grav['assets']->addJs('plugin://grav-diagrams/js/main.js', 102, true , null, 'bottom' );
-            if($this->config->get('builtin-css')){
-                  $this->grav['assets']->addCss('plugin://grav-diagrams/css/mermaid.css');
-            }
+//            $this->grav['assets']->addJs('plugin://grav-diagrams/js/underscore-min.js');
+//            $this->grav['assets']->addJs('plugin://grav-diagrams/js/lodash.min.js');
+//            $this->grav['assets']->addJs('plugin://grav-diagrams/js/raphael-min.js');
+//            $this->grav['assets']->addJs('plugin://grav-diagrams/js/mermaid.min.js');
+//            $this->grav['assets']->addJs('plugin://grav-diagrams/js/main.js', 102, true , null, 'bottom' );
+//            if($this->config->get('builtin-css')){
+//                  $this->grav['assets']->addCss('plugin://grav-diagrams/css/mermaid.css');
+//            }
 
             // Used to start the conversion of the div "diagram" when the page is loaded
             /*
