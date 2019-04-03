@@ -12,30 +12,42 @@ class GravDiagramsPlugin extends Plugin
     protected $hasSequence;
     protected $hasMermaid;
     protected $mergeConfig;
+    protected $active;
     /**
      * @return array
      */
     public static function getSubscribedEvents()
     {
+       
         $grav = Grav::instance();
+         $grav['debugger']->addMessage("garv-diagrams");
         return [
-            'onPageInitialized' => ['onPageInitialized', 0],
-            'onPageContentRaw' => ['onPageContentRaw', 0],
-            'onPageInitialized' => ['onPageInitialized', 0],
-       'onTwigSiteVariables'   => ['onTwigSiteVariables', 0]
+            'onPageInitialized' => ['onPageInitialized', 0]
+//            ,
+//            'onPageContentRaw' => ['onPageContentRaw', 0]
+//       'onTwigSiteVariables'   => ['onTwigSiteVariables', 0]
         ];
     }
     public function onPageInitialized(Event $event)
     {
+        $this->grav['debugger']->addMessage("onPageInitialized");
+        
         $this->config = $this->mergeConfig($event['page']);
         $this->hasFlow = $this->config->get('flow.enabled');
         $this->hasMermaid = $this->config->get('mermaid.enabled');
         $this->hasSequence = $this->config->get('sequence.enabled');
-        
+        $this->active = $this->config->get('active');
+        $this->grav['debugger']->addMessage( $this->config );
+        if( $this->active)
+        {
+            $this->enable(['onPageContentRaw' => ['onPageContentRaw', 0]]);
+        }
+//        $this->onPageContentRaw($event);
     }
-
     public function onPageContentRaw(Event $event)
     {
+        //$this->onPageInitialized( $event );
+        $this->grav['debugger']->addMessage("onPageContentRaw");
         // Variables
         $this->align = $this->config->get('align');
         
